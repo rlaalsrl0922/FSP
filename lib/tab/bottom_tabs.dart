@@ -15,9 +15,9 @@ class TabNavigations{
   TabNavigations({required this.page, required this.title, required this.icon});
 
   static List<TabNavigations> get items=>[
-    TabNavigations(page: TrendingScreen(), title: "Trending", icon: Icon(UniconsLine.fire)),
-    TabNavigations(page: PrincipleScreen(), title: "Principles", icon: Icon(UniconsLine.lightbulb)),
-    TabNavigations(page: ETFScreen(), title: "ETF", icon: Icon(UniconsLine.archive)),
-    TabNavigations(page: IndividualScreen(), title: "Individual", icon: Icon(UniconsLine.analysis))
+    TabNavigations(page: TrendingScreen(), title: Text("Trending"), icon: Icon(UniconsLine.fire)),
+    TabNavigations(page: PrincipleScreen(), title: Text("Principles"), icon: Icon(UniconsLine.lightbulb)),
+    TabNavigations(page: ETFScreen(), title: Text("ETF"), icon: Icon(UniconsLine.archive)),
+    TabNavigations(page: IndividualScreen(), title: Text("Individual"), icon: Icon(UniconsLine.analysis))
   ];
 }

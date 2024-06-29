@@ -58,13 +58,6 @@ Container _buildTitleSection(String imageName, String stockName, int count) {
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Container(
               padding: const EdgeInsets.only(right: 16),
-              /*
-              child: Image.network(
-                imageName,
-                width: 50,
-                height: 50,
-                fit: BoxFit.contain,
-              ),*/
               child: const CircleAvatar(
                 radius: 25,
                 backgroundImage: AssetImage('imgs/warren_buffett.jpg'),

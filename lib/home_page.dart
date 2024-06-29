@@ -1,15 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/ETFScreen.dart';
+import 'package:myapp/screens/TrendingScreen.dart';
+import 'package:myapp/screens/PrincipleScreen.dart';
+import 'package:unicons/unicons.dart';
+import 'package:myapp/screens/IndividualScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget{
+  const HomePage({Key? key}) : super(key:key);
+
   @override
-  Widget build(BuildContext context) {
+  State<HomePage> createState() => _HomePageState();
+}
+class _HomePageState extends State<HomePage>{
+  int _selectedIndex=0;
+  @override
+  Widget build(BuildContext context){
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(children: [
-              SizedBox(height: 100.0),
-              Text("Study With Me Home", style: TextStyle(fontSize: 40)),
-              SizedBox(height: 20.0)
-            ])));
+      body: IndexedStack(
+        index : _selectedIndex,
+        children : [TrendingScreen(),PrincipleScreen(),ETFScreen(),IndividualScreen()],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+    type: BottomNavigationBarType.fixed,
+    currentIndex: _selectedIndex,
+    onTap:(index){
+    setState(() {
+    _selectedIndex=index;
+    });
+    },
+    items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+    icon: Icon(UniconsLine.fire),
+    label: 'Trending',
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(UniconsLine.lightbulb),
+    label: 'Principle',
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(UniconsLine.archive),
+    label: 'ETF',
+    ),
+    BottomNavigationBarItem(
+    icon: Icon(UniconsSolid.analysis),
+    label: 'Individual',
+    )],
+    ),
+    );
   }
+}
+
+AppBarTheme appBarTheme(){
+  return AppBarTheme(
+    centerTitle: false,
+    color:Colors.deepPurple,
+    elevation:0.0,
+    iconTheme: IconThemeData(color:Colors.black),
+      titleTextStyle: GoogleFonts.nanumGothic(
+      fontSize:16,
+      fontWeight:FontWeight.bold,
+      color: Colors.black,
+    )
+  );
+}
+
+BottomNavigationBarThemeData bottomNavigationBarTheme(){
+  return const BottomNavigationBarThemeData(
+    backgroundColor: Colors.white,
+    selectedItemColor: Colors.black,
+    unselectedItemColor: Colors.black12,
+    showUnselectedLabels: true,
+  );
+}
+
+ElevatedButtonThemeData elevatedButtonTheme() {
+  return ElevatedButtonThemeData(
+      style : ElevatedButton.styleFrom(
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0.5),
+  )
+  )
+  );
+}
+
+ThemeData theme(){
+  return ThemeData(
+    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: appBarTheme(),
+    bottomNavigationBarTheme: bottomNavigationBarTheme(),
+    primarySwatch: Colors.deepPurple,
+  );
 }

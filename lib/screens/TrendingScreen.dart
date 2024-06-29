@@ -6,6 +6,6 @@ class TrendingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Trending Screen'));
+    return Scaffold(appBar: AppBar(), body: Center(child: Text('Trending Screen')));
   }
 }
