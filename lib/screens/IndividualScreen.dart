@@ -2,14 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
 
 class IndividualScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar : AppBar(
-      backgroundColor: FlutterFlowTheme.of(context).primary,
+    return Scaffold(appBar: AppBar(
       automaticallyImplyLeading: false,
       leading: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
@@ -21,37 +19,20 @@ class IndividualScreen extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Image.network(
-            // 티커 이미지 경로
-            'https://picsum.photos/seed/625/600',
-            fit: BoxFit.cover,
+            'assets/images/download.png',
           ),
         ),
       ),
       title: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                '[Ticker]',
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  fontFamily: 'Readex Pro',
-                  letterSpacing: 0,
-                ),
-              ),
-            ],
+          Text(
+            '[Ticker]'
           ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
             child: Text(
               '[Stock Name]',
-              style: FlutterFlowTheme.of(context).headlineMedium.override(
-                fontFamily: 'Outfit',
-                color: Colors.white,
-                fontSize: 22,
-                letterSpacing: 0,
-              ),
             ),
           ),
         ],
@@ -74,25 +55,15 @@ class IndividualScreen extends StatelessWidget {
         children: [
         Text(
         'Stock Price ',
-        style: FlutterFlowTheme.of(context)
-            .bodyMedium
-            .override(
-        fontFamily: 'Readex Pro',
-    fontSize: 20,
-    letterSpacing: 0,
-    ),
+          style: TextStyle(
+              fontSize: 20,
+              color: Colors.black)
     ),
     Padding(
     padding:
-    EdgeInsetsDirectional.fromSTEB(0, 3, 0, 0),
+    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
     child: Text(
-    'Stock change(+) (Stock change(%))',
-    style: FlutterFlowTheme.of(context)
-        .bodyMedium
-        .override(
-    fontFamily: 'Readex Pro',
-    letterSpacing: 0,
-    ),),),],
+    'Stock change(+) (Stock change(%))',),),],
     ),
     ),
           Padding(
