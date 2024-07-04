@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/BookmarkScreen.dart';
 import 'package:myapp/screens/ETFScreen.dart';
+import 'package:myapp/screens/TopScreen.dart';
 import 'package:myapp/screens/TrendingScreen.dart';
 import 'package:myapp/screens/PrincipleScreen.dart';
 import 'package:unicons/unicons.dart';
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget{
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage>{
   int _selectedIndex=0;
   @override
@@ -19,35 +22,30 @@ class _HomePageState extends State<HomePage>{
     return Scaffold(
       body: IndexedStack(
         index : _selectedIndex,
-        children : [TrendingScreen(),PrincipleScreen(),ETFScreen(),IndividualScreen()],
+        children : [BookmarkScreen(),IndividualScreen(),TopScreen()],
       ),
       bottomNavigationBar: BottomNavigationBar(
-    type: BottomNavigationBarType.fixed,
-    currentIndex: _selectedIndex,
-    onTap:(index){
-    setState(() {
-    _selectedIndex=index;
-    });
-    },
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap:(index){
+        setState(() {
+        _selectedIndex=index;
+          });
+        },
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-    icon: Icon(UniconsLine.fire),
-    label: 'Trending',
+    icon: Icon(UniconsLine.star),
+    label: 'Star',
     ),
     BottomNavigationBarItem(
-    icon: Icon(UniconsLine.lightbulb),
-    label: 'Principle',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(UniconsLine.archive),
-    label: 'ETF',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(UniconsSolid.analysis),
+    icon: Icon(UniconsLine.analysis),
     label: 'Individual',
-    )],
     ),
-    );
+    BottomNavigationBarItem(
+    icon: Icon(UniconsLine.list_ul),
+    label: 'Top100',
+    ),],
+    ),);
   }
 }
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:myapp/tab/tab_action.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:myapp/home_page.dart';
-import 'package:myapp/login_page.dart';
-import 'package:myapp/signup_page.dart';
+import 'package:myapp/page/home_page.dart';
+import 'package:myapp/page/login_page.dart';
+import 'package:myapp/page/signup_page.dart';
 import 'package:myapp/tab/bottom_tabs.dart';
 
 void main() {

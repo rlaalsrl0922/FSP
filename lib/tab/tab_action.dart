@@ -22,7 +22,6 @@ class _TabsActionsPageState extends State<TabActions> {
     setState(() {
       widget.selectedIndex = index;
       _selectedIndex = widget.selectedIndex;
-      print(_selectedIndex);
     });
   }
 
@@ -45,14 +44,17 @@ class _TabsActionsPageState extends State<TabActions> {
         type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(UniconsLine.fire), label: 'Trending'),
+            icon: Icon(UniconsLine.star),
+            label: 'Star',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(UniconsLine.lightbulb), label: 'Principle'),
+            icon: Icon(UniconsLine.analysis),
+            label: 'Individual',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(UniconsLine.archive), label: 'ETF'),
-          BottomNavigationBarItem(
-              icon:Icon( UniconsLine.analysis), label: 'Individual'),
-        ],
+            icon: Icon(UniconsLine.list_ul),
+            label: 'Top100',
+          ),],
         currentIndex: _selectedIndex,
         onTap: _ItemTapped,
       ),

@@ -52,15 +52,28 @@ class LoginForm extends StatelessWidget {
         key: _formResponse,
         child: Column(
           children: [
-            TextForm("email"),
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+            decoration : InputDecoration(
+              hintText: "Email",
+              border: OutlineInputBorder()
+              ),
+            ),
             SizedBox(height: 20),
-            TextForm("Password"),
+            TextFormField(
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            decoration: InputDecoration(
+                hintText: 'PassWord',
+                border: OutlineInputBorder()
+              ),
+            ),
             SizedBox(height: 20),
             submitButton(context),
             SizedBox(height: 10),
             TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/home'),
-              child: const Text('Sign up'),
+              onPressed: () => Navigator.pushNamed(context, '/signup'),
+                child: const Text('Sign up'),
             ),
           ],
         ));
@@ -78,7 +91,7 @@ class LoginForm extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(15),
         child: const Text(
-          "SUBMIT",
+          "Sign in",
           style: TextStyle(
             fontSize: 18,
           ),

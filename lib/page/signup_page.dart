@@ -101,4 +101,60 @@ class _SignupFormetState extends State<SignupFormet> {
       ),
     );
   }
+
+// 폼 제출 버튼 위젯
+/*
+  Widget submitButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        if (_signupFormKey.currentState!.validate()) {
+          _signupFormKey.currentState!.save();
+
+          final response = await http.post(
+              Uri.parse('http://10.0.2.2:3000/auth/register'),
+              body: {"id": _id, "nickname": _nickname, "pwd": _password});
+          if (response.statusCode == 200) {
+            // 회원가입 성공
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/login');
+                        },
+                        child: Text('close'))
+                  ],
+                  title: Text('Stock newses'),
+                  content: Text('SignUp Complete!'),
+                ));
+          } else {
+            // 회원가입 실패
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('close'))
+                  ],
+                  title: Text('Stock newses'),
+                  content: Text('SignUp Failed : already SignUped'),
+                ));
+          }
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: const Text(
+          "SignUp",
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+    );
+  }*/
 }
