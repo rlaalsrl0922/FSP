@@ -9,7 +9,7 @@ class LoginPage extends StatelessWidget {
         child: ListView(children:[
           SizedBox(height: 100.0),
           Center(
-          child: Text("Portfolio Combine", style: TextStyle(fontSize: 30))),
+          child: Text("Stock News", style: TextStyle(fontSize: 30))),
           SizedBox(height:20.0),
           LoginForm()
         ])

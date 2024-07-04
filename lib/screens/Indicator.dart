@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:unicons/unicons.dart';
 import 'package:http/http.dart' as http;
 
 class Indicators extends StatefulWidget {

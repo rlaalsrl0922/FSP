@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/BookmarkScreen.dart';
-import 'package:myapp/screens/ETFScreen.dart';
 import 'package:myapp/screens/TopScreen.dart';
-import 'package:myapp/screens/TrendingScreen.dart';
-import 'package:myapp/screens/PrincipleScreen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:myapp/screens/IndividualScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
