@@ -32,8 +32,7 @@ class TextForm extends StatelessWidget {
         Text(text),
         SizedBox(height: 5.0),
         TextFormField(
-            validator: (value) =>
-            value!.isEmpty ? "Please enter some text" : null,
+            validator: (val) => val!.isEmpty ? "Please Fill" : null,
             obscureText: text == "Password" ? true : false,
             decoration: InputDecoration(
               hintText: "Enter $text",
