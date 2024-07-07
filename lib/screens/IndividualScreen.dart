@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:csv/csv.dart';
 
 class IndividualScreen extends StatelessWidget {
   @override
@@ -89,8 +88,8 @@ class IndividualScreen extends StatelessWidget {
                   children: [
                     SizedBox(width: 10,),
                     Container(
-                    width: 50,
-                    height: 50,
+                    width: 25,
+                    height: 25,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -141,11 +140,14 @@ class StockChart extends StatefulWidget {
 
 class _StockChartState extends State<StockChart> {
   late Future<List<ChartSampleData>> _chartData;
+  TrackballBehavior? _trackballBehavior;
 
   @override
   void initState() {
     super.initState();
     _chartData = getChartData();
+    _trackballBehavior = TrackballBehavior(
+      enable: true, activationMode: ActivationMode.longPress);
   }
 
   @override
@@ -160,12 +162,15 @@ class _StockChartState extends State<StockChart> {
         } else {
           final data = snapshot.data ?? [];
           return SfCartesianChart(
+            title: ChartTitle(text: 'MSFT'),
+            trackballBehavior: _trackballBehavior,
             zoomPanBehavior: ZoomPanBehavior(
               enablePanning: true,
             ),
             primaryXAxis: DateTimeAxis(
               autoScrollingDelta: 15,
               autoScrollingMode: AutoScrollingMode.start,
+              majorGridLines: MajorGridLines(width:0),
             ),
             series: <CandleSeries>[
               CandleSeries<ChartSampleData, DateTime>(
@@ -198,9 +203,7 @@ class ChartSampleData {
 // getChartData 함수 정의
 Future<List<ChartSampleData>> getChartData() async {
   // CSV 파일 읽기
-  final String rawCsv = await rootBundle.loadString('csv/msft_stock_data.csv');
-  print(rawCsv);
-  print('CSV Data: $rawCsv');
+  final String rawCsv = await rootBundle.loadString('assets/csv/msft.csv');
 
   List<List<dynamic>> csvTable = CsvToListConverter().convert(rawCsv);
 
