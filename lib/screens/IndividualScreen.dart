@@ -1,33 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:myapp/screens/LeftDrawer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
+import 'package:myapp/page/drawer.dart';
+
 
 class IndividualScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
-          child: Container(
-            width: 120,
-            height: 120,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.network(
-              'assets/images/download.png',
-            ),
-          ),
-        ),
         title: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
+            Container(
+              width: 40,
+              height: 40,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Image.network(
+                'assets/images/download.png',
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+            ),
             Text('[Ticker]'),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
@@ -128,6 +130,7 @@ class IndividualScreen extends StatelessWidget {
           ],
         ),
       ),
+      drawer: LeftDrawer(),
     );
   }
 }

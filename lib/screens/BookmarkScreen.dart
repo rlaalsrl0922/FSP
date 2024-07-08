@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:myapp/screens/LeftDrawer.dart';
 import 'package:myapp/screens/NewsScreen.dart';
 
 class BookmarkScreen extends StatelessWidget {
@@ -30,6 +31,8 @@ class BookmarkScreen extends StatelessWidget {
                   child: CompanyNewsScreen(),
                 ),
               )
-            ])));
+            ])),
+        drawer: LeftDrawer(),
+    );
   }
 }

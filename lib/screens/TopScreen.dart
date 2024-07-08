@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:myapp/screens/LeftDrawer.dart';
+import 'package:myapp/screens/testscreen.dart';
+import 'package:myapp/page/drawer.dart';
+import 'package:unicons/unicons.dart';
 
 class TopScreen extends StatelessWidget {
 
@@ -10,27 +14,38 @@ class TopScreen extends StatelessWidget {
         title: Row(
             children: [const Text('Top100 page')]
         )
-    ), body: Center(child: Text('Top100 Page')),
-        drawer: Drawer(
-          child: ListView(
-              padding: EdgeInsets.zero,
+    ), body: SafeArea(
+        top: true,
+        child: Column(mainAxisSize: MainAxisSize.max, children: [
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
-          DrawerHeader(
-          child: Text('Information'),
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
+                Container(
+                  alignment: Alignment.center,
+                  width: 350,
+                  height: 30,
+                  child: Row(
+                    children: [
+                      Icon(UniconsLine.trophy),
+                      SizedBox(width: 10),
+                      Text("Top 100 Stocks by Market Cap",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),)]),
+                ),
+              ],
+            ),
           ),
-        ),
-        ListTile(
-          title: Text('My Page'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-        title: Text('Data Source'),
-    onTap: () {
-      Navigator.pop(context);
-    })])));
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 20, 0, 0),
+              child: Stockscreen(),
+            ),
+          )
+        ])),
+    drawer: LeftDrawer(),
+    );
   }
 }

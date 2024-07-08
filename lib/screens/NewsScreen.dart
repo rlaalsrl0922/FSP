@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:unicons/unicons.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class CompanyNewsScreen extends StatelessWidget {
   // Example data
@@ -78,13 +80,18 @@ class CompanyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Image.network(
+            Row( children: [Container(
+              width: 60,
+              height: 60,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape:BoxShape.circle,
+              ),
+              child: Image.network(
                   company.logoUrl,
                   height: 50,
                   width: 50,
-                ),
+                )),
                 SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,6 +134,7 @@ class NewsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(news.title),
+      leading: Icon(UniconsLine.newspaper),
       onTap: () async {
         if (await canLaunch(news.url)) {
           await launch(news.url);
@@ -155,6 +163,8 @@ class Company {
 class News {
   final String title;
   final String url;
+  //final String date;
 
+  //News({required this.title, required this.url,required this.date});
   News({required this.title, required this.url});
 }
