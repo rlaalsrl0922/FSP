@@ -20,7 +20,7 @@ class BookmarkScreen extends StatelessWidget {
                     Container(
                       width: 350,
                       height: 30,
-                      child: Text("BookMarkScreen"),
+                      child: Text("BookMark Screen"),
                     ),
                   ],
                 ),

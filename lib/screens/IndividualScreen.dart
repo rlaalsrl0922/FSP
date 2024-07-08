@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:myapp/screens/LeftDrawer.dart';
+import 'package:myapp/screens/NewsScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
-import 'package:myapp/page/drawer.dart';
+import 'package:myapp/screens/IndividualNewsScreen.dart';
 
 
 class IndividualScreen extends StatelessWidget {
@@ -30,9 +31,12 @@ class IndividualScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
             ),
-            Text('[Ticker]'),
+            Text('[Ticker]',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
               child: Text('[Stock Name]'),
             ),
           ],
@@ -88,10 +92,10 @@ class IndividualScreen extends StatelessWidget {
                 children: [
                   Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 10,),
+                    SizedBox(width: 20,),
                     Container(
-                    width: 25,
-                    height: 25,
+                    width: 30,
+                    height: 30,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -119,8 +123,8 @@ class IndividualScreen extends StatelessWidget {
                       Container(
                       width: 350,
                       height: 500,
-                      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
-                    ),
+                        child: IndividualNewsScreen(),
+                     ),
                       ],
                     ),
                   ),

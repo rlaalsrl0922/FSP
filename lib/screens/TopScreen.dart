@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:myapp/screens/LeftDrawer.dart';
 import 'package:myapp/screens/testscreen.dart';
-import 'package:myapp/page/drawer.dart';
 import 'package:unicons/unicons.dart';
 
 class TopScreen extends StatelessWidget {
