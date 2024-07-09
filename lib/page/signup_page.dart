@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatelessWidget {
   @override
@@ -14,7 +15,6 @@ class SignupPage extends StatelessWidget {
   }
 }
 
-
 class SignupFormet extends StatefulWidget {
   @override
   State<SignupFormet> createState() => _SignupFormetState();
@@ -22,11 +22,57 @@ class SignupFormet extends StatefulWidget {
 
 class _SignupFormetState extends State<SignupFormet> {
   final _signupFormKey = GlobalKey<FormState>();
-  String _route = '';
-  String _id = '';
+  String _username = '';
   String _password = '';
-  String _nickname = '';
+  String _nickName = '';
 
+  Future<void> _signUp() async {
+    if (!_signupFormKey.currentState!.validate()) return;
+
+    _signupFormKey.currentState!.save();
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://your-api-url.com/auth'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _username,
+          'password': _password,
+          'nickName': _nickName,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        _showDialog('성공', '회원가입 성공!', () {
+          Navigator.pushNamed(context, '/login');
+        });
+      } else {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        _showDialog('오류', responseData['message'] ?? '회원가입 실패');
+      }
+    } catch (error) {
+      _showDialog('오류', '네트워크 오류가 발생했습니다.');
+    }
+  }
+
+  void _showDialog(String title, String message, [VoidCallback? onConfirm]) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('확인'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (onConfirm != null) onConfirm();
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,27 +81,28 @@ class _SignupFormetState extends State<SignupFormet> {
         child: Column(
           children: [
             SizedBox(height: 5.0),
-            CustomTextFormField("Id"),
+            CustomTextFormField('Id'),
             SizedBox(height: 15.0),
-            CustomTextFormField("Password"),
+            CustomTextFormField('Password'),
             SizedBox(height: 15.0),
-            CustomTextFormField("Nickname"),
+            CustomTextFormField('Nickname'),
             SizedBox(height: 15),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[submitButton(context),
-            SizedBox(width : 10),
-            TextButton(
-              onPressed: () => {Navigator.pushNamed(context, '/login')},
-              child: const Text('Login'),
-            )]),
+                children: <Widget>[
+                  submitButton(context),
+                  SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () => {Navigator.pushNamed(context, '/login')},
+                    child: const Text('Login'),
+                  )
+                ]),
           ],
         ));
   }
 
-
   // input
-  Widget CustomTextFormField(text) {
+  Widget CustomTextFormField(String text) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,12 +114,14 @@ class _SignupFormetState extends State<SignupFormet> {
             decoration: InputDecoration(
               hintText: "Enter $text",
             ),
-            onSaved: (value) => {
-              text == 'Email'
-                  ? _id = value!
-                  : text == 'Password'
-                  ? _password = value!
-                  : _nickname = value!
+            onSaved: (value) {
+              if (text == 'Id') {
+                _username = value!;
+              } else if (text == 'Password') {
+                _password = value!;
+              } else {
+                _nickName = value!;
+              }
             })
       ],
     );
@@ -80,17 +129,11 @@ class _SignupFormetState extends State<SignupFormet> {
 
   Widget submitButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () async {
-        if (_signupFormKey.currentState!.validate()) {
-          _signupFormKey.currentState!.save();
-          debugPrint('$_id, $_password, $_nickname Trying Sign Up');
-          Navigator.pushNamed(context, '/home');
-        }
-      },
+      onPressed: _signUp,
       child: Container(
         padding: const EdgeInsets.all(15),
         child: const Text(
-          "SignUp",
+          "Sign Up",
           style: TextStyle(
             fontSize: 18,
           ),
@@ -98,60 +141,4 @@ class _SignupFormetState extends State<SignupFormet> {
       ),
     );
   }
-
-// 폼 제출 버튼 위젯
-/*
-  Widget submitButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        if (_signupFormKey.currentState!.validate()) {
-          _signupFormKey.currentState!.save();
-
-          final response = await http.post(
-              Uri.parse('http://10.0.2.2:3000/auth/register'),
-              body: {"id": _id, "nickname": _nickname, "pwd": _password});
-          if (response.statusCode == 200) {
-            // 회원가입 성공
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
-                        child: Text('close'))
-                  ],
-                  title: Text('Stock newses'),
-                  content: Text('SignUp Complete!'),
-                ));
-          } else {
-            // 회원가입 실패
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('close'))
-                  ],
-                  title: Text('Stock newses'),
-                  content: Text('SignUp Failed : already SignUped'),
-                ));
-          }
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: const Text(
-          "SignUp",
-          style: TextStyle(
-            fontSize: 18,
-          ),
-        ),
-      ),
-    );
-  }*/
 }

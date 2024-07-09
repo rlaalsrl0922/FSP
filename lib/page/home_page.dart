@@ -4,6 +4,7 @@ import 'package:myapp/screens/TopScreen.dart';
 import 'package:unicons/unicons.dart';
 import 'package:myapp/screens/IndividualScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/screens/LeftDrawer.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key:key);
@@ -12,37 +13,41 @@ class HomePage extends StatefulWidget{
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
-  int _selectedIndex=0;
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index : _selectedIndex,
-        children : [BookmarkScreen(),IndividualScreen(),TopScreen()],
+        index: _selectedIndex,
+        children: [BookmarkScreen(), IndividualScreen(), TopScreen()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        onTap:(index){
-        setState(() {
-        _selectedIndex=index;
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
           });
         },
-    items: const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-    icon: Icon(UniconsLine.star),
-    label: 'Star',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(UniconsLine.analysis),
-    label: 'Individual',
-    ),
-    BottomNavigationBarItem(
-    icon: Icon(UniconsLine.list_ul),
-    label: 'Top100',
-    ),],
-    ),);
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(UniconsLine.star),
+            label: 'Star',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(UniconsLine.analysis),
+            label: 'Individual',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(UniconsLine.list_ul),
+            label: 'Top100',
+          ),
+        ],
+      ),
+      drawer: LeftDrawer(),
+    );
   }
 }
 
