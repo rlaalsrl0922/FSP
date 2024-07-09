@@ -1,118 +1,74 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
-class LoginPage extends StatelessWidget {
+class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView(
-          children: [
-            SizedBox(height: 100.0),
-            Center(child: Text("Stock News", style: TextStyle(fontSize: 30))),
-            SizedBox(height: 20.0),
-            LoginForm(),
-          ],
-        ),
-      ),
-    );
+        body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(children: [
+              SizedBox(height: 100.0),
+              SignupFormet(),
+            ])));
   }
 }
 
-class TextForm extends StatelessWidget {
-  final String text;
-  const TextForm(this.text);
-
+class SignupFormet extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(text),
-        SizedBox(height: 5.0),
-        TextFormField(
-          validator: (val) => val!.isEmpty ? "Please Fill" : null,
-          obscureText: text == "Password" ? true : false,
-          decoration: InputDecoration(
-            hintText: "Enter $text",
-          ),
-        ),
-      ],
-    );
-  }
+  State<SignupFormet> createState() => _SignupFormetState();
 }
 
-class LoginForm extends StatefulWidget {
-  @override
-  _LoginFormState createState() => _LoginFormState();
-}
+class _SignupFormetState extends State<SignupFormet> {
+  final _signupFormKey = GlobalKey<FormState>();
+  String _username = '';
+  String _password = '';
+  String _nickName = '';
 
-class _LoginFormState extends State<LoginForm> {
-  final _formResponse = GlobalKey<FormState>();
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  Future<void> _signUp() async {
+    if (!_signupFormKey.currentState!.validate()) return;
 
-  Future<void> _login() async {
-    final String username = _idController.text;
-    final String password = _passwordController.text;
+    _signupFormKey.currentState!.save();
 
-    if (_formResponse.currentState!.validate()) {
-      try {
-        final dio = Dio();
-        dio.options.headers['Content-Type'] = 'application/json';
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/auth'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _username,
+          'password': _password,
+          'nickName': _nickName,
+        }),
+      );
 
-        final response = await dio.post(
-          'https://localhost:8080/auth/login',
-          data: jsonEncode({
-            'username': username,
-            'password': password,
-          }),
-        );
-
-        if (response.statusCode == 200) {
-          final responseData = response.data;
-          final String nickname = responseData['nickname'];
-          _showSuccessDialog('로그인 성공! 닉네임: $nickname');
-          Navigator.pushNamed(context, '/home');
-        } else {
-          final responseData = response.data;
-          _showErrorDialog(responseData['message'] ?? '로그인 실패');
-        }
-      } catch (error) {
-        print(error);
-        _showErrorDialog('네트워크 오류가 발생했습니다.');
+      if (response.statusCode == 200) {
+        _showDialog('성공', '회원가입 성공!', () {
+          Navigator.pushNamed(context, '/login');
+        });
+      } else {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        _showDialog('오류', responseData['message'] ?? '회원가입 실패');
       }
+    } catch (error) {
+      print(error);
+      _showDialog('Error', error.toString());
     }
   }
 
-  void _showErrorDialog(String message) {
+  void _showDialog(String title, String message, [VoidCallback? onConfirm]) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('오류'),
+        title: Text(title),
         content: Text(message),
         actions: <Widget>[
           TextButton(
             child: Text('확인'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('성공'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: Text('확인'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (onConfirm != null) onConfirm();
+            },
           ),
         ],
       ),
@@ -122,46 +78,60 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formResponse,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _idController,
-            keyboardType: TextInputType.emailAddress,
+        key: _signupFormKey,
+        child: Column(
+          children: [
+            SizedBox(height: 5.0),
+            CustomTextFormField('Id'),
+            SizedBox(height: 15.0),
+            CustomTextFormField('Password'),
+            SizedBox(height: 15.0),
+            CustomTextFormField('Nickname'),
+            SizedBox(height: 15),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  submitButton(context),
+                  SizedBox(width: 20),
+                  returnButton(context)
+                ]),
+          ],
+        ));
+  }
+
+  // input
+  Widget CustomTextFormField(String text) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(text),
+        SizedBox(height: 5.0),
+        TextFormField(
+            validator: (val) => val!.isEmpty ? "Fill the value" : null,
+            obscureText: text == "Password" ? true : false,
             decoration: InputDecoration(
-              hintText: "Id",
-              border: OutlineInputBorder(),
+              hintText: "Enter $text",
             ),
-          ),
-          SizedBox(height: 20),
-          TextFormField(
-            controller: _passwordController,
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
-            decoration: InputDecoration(
-              hintText: 'PassWord',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          SizedBox(height: 20),
-          submitButton(context),
-          SizedBox(height: 10),
-          TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/signup'),
-            child: const Text('Sign up'),
-          ),
-        ],
-      ),
+            onSaved: (value) {
+              if (text == 'Id') {
+                _username = value!;
+              } else if (text == 'Password') {
+                _password = value!;
+              } else {
+                _nickName = value!;
+              }
+            })
+      ],
     );
   }
 
   Widget submitButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: _login,
+      onPressed: _signUp,
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         child: const Text(
-          "Log in",
+          "Sign Up",
           style: TextStyle(
             fontSize: 18,
           ),
@@ -169,4 +139,15 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+  Widget returnButton(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () => {Navigator.pushNamed(context, '/login')},
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child:const Text('Return',
+        style: TextStyle(fontSize:18),),
+        )
+      );
+  }
+
 }
