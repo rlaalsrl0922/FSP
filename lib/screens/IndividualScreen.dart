@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:myapp/screens/LeftDrawer.dart';
-import 'package:myapp/screens/NewsScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
@@ -70,14 +69,16 @@ class IndividualScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 20, 0, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Container(
+                          Expanded(
+                          child:Container(
                               width: 350,
                               height: 200,
                               child: StockChart()
+                          )
                           ),
                         ],
                       ),
@@ -120,10 +121,12 @@ class IndividualScreen extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        Expanded(child:
                       Container(
                       width: 350,
                       height: 500,
                         child: IndividualNewsScreen(),
+                      )
                      ),
                       ],
                     ),
