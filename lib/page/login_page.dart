@@ -4,19 +4,16 @@ import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding : const EdgeInsets.all(12.0),
-            child: ListView(children:[
+            padding: const EdgeInsets.all(12.0),
+            child: ListView(children: [
               SizedBox(height: 100.0),
-              Center(
-                  child: Text("Stock News", style: TextStyle(fontSize: 30))),
-              SizedBox(height:20.0),
+              Center(child: Text("Stock News", style: TextStyle(fontSize: 30))),
+              SizedBox(height: 20.0),
               LoginForm()
-            ])
-        )
-    );
+            ])));
   }
 }
 
@@ -60,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
     if (_formResponse.currentState!.validate()) {
       try {
         final response = await http.post(
-          Uri.parse('https://localhost:8080/auth/login'),
+          Uri.parse('http://localhost:8080/auth/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'name': name,
@@ -69,13 +66,25 @@ class _LoginFormState extends State<LoginForm> {
         );
 
         if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-          final String nickname = responseData['nickname'];
-          _showSuccessDialog('로그인 성공! 닉네임: $nickname');
-          Navigator.pushNamed(context, '/home');
+          // 서버 응답이 JSON 형식일 경우만 파싱 시도
+          try {
+            final Map<String, dynamic> responseData = jsonDecode(response.body);
+            final String nickname = responseData['nickname'];
+            _showSuccessDialog('로그인 성공! 닉네임: $nickname');
+            Navigator.pushNamed(context, '/home');
+          } catch (e) {
+            // JSON 파싱 에러가 발생하면 텍스트 응답 처리
+            _showErrorDialog('Unexpected response format');
+          }
         } else {
-          final Map<String, dynamic> responseData = jsonDecode(response.body);
-          _showErrorDialog(responseData['message'] ?? '로그인 실패');
+          // 서버 응답이 JSON 형식일 경우만 파싱 시도
+          try {
+            final Map<String, dynamic> responseData = jsonDecode(response.body);
+            _showErrorDialog(responseData['message'] ?? '로그인 실패');
+          } catch (e) {
+            // JSON 파싱 에러가 발생하면 텍스트 응답 처리
+            _showErrorDialog('Unexpected response format: ${response.body}');
+          }
         }
       } catch (error) {
         print(error);
