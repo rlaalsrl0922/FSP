@@ -1,73 +1,118 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
-class SignupPage extends StatelessWidget {
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(children: [
-              SizedBox(height: 100.0),
-              SignupFormet(),
-            ])));
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ListView(
+          children: [
+            SizedBox(height: 100.0),
+            Center(child: Text("Stock News", style: TextStyle(fontSize: 30))),
+            SizedBox(height: 20.0),
+            LoginForm(),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-class SignupFormet extends StatefulWidget {
+class TextForm extends StatelessWidget {
+  final String text;
+  const TextForm(this.text);
+
   @override
-  State<SignupFormet> createState() => _SignupFormetState();
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(text),
+        SizedBox(height: 5.0),
+        TextFormField(
+          validator: (val) => val!.isEmpty ? "Please Fill" : null,
+          obscureText: text == "Password" ? true : false,
+          decoration: InputDecoration(
+            hintText: "Enter $text",
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class _SignupFormetState extends State<SignupFormet> {
-  final _signupFormKey = GlobalKey<FormState>();
-  String _username = '';
-  String _password = '';
-  String _nickName = '';
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
 
-  Future<void> _signUp() async {
-    if (!_signupFormKey.currentState!.validate()) return;
+class _LoginFormState extends State<LoginForm> {
+  final _formResponse = GlobalKey<FormState>();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-    _signupFormKey.currentState!.save();
+  Future<void> _login() async {
+    final String username = _idController.text;
+    final String password = _passwordController.text;
 
-    try {
-      final response = await http.post(
-        Uri.parse('https://your-api-url.com/auth'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'username': _username,
-          'password': _password,
-          'nickName': _nickName,
-        }),
-      );
+    if (_formResponse.currentState!.validate()) {
+      try {
+        final dio = Dio();
+        dio.options.headers['Content-Type'] = 'application/json';
 
-      if (response.statusCode == 200) {
-        _showDialog('성공', '회원가입 성공!', () {
-          Navigator.pushNamed(context, '/login');
-        });
-      } else {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        _showDialog('오류', responseData['message'] ?? '회원가입 실패');
+        final response = await dio.post(
+          'https://localhost:8080/auth/login',
+          data: jsonEncode({
+            'username': username,
+            'password': password,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = response.data;
+          final String nickname = responseData['nickname'];
+          _showSuccessDialog('로그인 성공! 닉네임: $nickname');
+          Navigator.pushNamed(context, '/home');
+        } else {
+          final responseData = response.data;
+          _showErrorDialog(responseData['message'] ?? '로그인 실패');
+        }
+      } catch (error) {
+        print(error);
+        _showErrorDialog('네트워크 오류가 발생했습니다.');
       }
-    } catch (error) {
-      _showDialog('오류', '네트워크 오류가 발생했습니다.');
     }
   }
 
-  void _showDialog(String title, String message, [VoidCallback? onConfirm]) {
+  void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
+        title: Text('오류'),
         content: Text(message),
         actions: <Widget>[
           TextButton(
             child: Text('확인'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              if (onConfirm != null) onConfirm();
-            },
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('성공'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('확인'),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
@@ -77,63 +122,46 @@ class _SignupFormetState extends State<SignupFormet> {
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: _signupFormKey,
-        child: Column(
-          children: [
-            SizedBox(height: 5.0),
-            CustomTextFormField('Id'),
-            SizedBox(height: 15.0),
-            CustomTextFormField('Password'),
-            SizedBox(height: 15.0),
-            CustomTextFormField('Nickname'),
-            SizedBox(height: 15),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  submitButton(context),
-                  SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () => {Navigator.pushNamed(context, '/login')},
-                    child: const Text('Login'),
-                  )
-                ]),
-          ],
-        ));
-  }
-
-  // input
-  Widget CustomTextFormField(String text) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(text),
-        SizedBox(height: 5.0),
-        TextFormField(
-            validator: (val) => val!.isEmpty ? "Fill the value" : null,
-            obscureText: text == "Password" ? true : false,
+      key: _formResponse,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _idController,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              hintText: "Enter $text",
+              hintText: "Id",
+              border: OutlineInputBorder(),
             ),
-            onSaved: (value) {
-              if (text == 'Id') {
-                _username = value!;
-              } else if (text == 'Password') {
-                _password = value!;
-              } else {
-                _nickName = value!;
-              }
-            })
-      ],
+          ),
+          SizedBox(height: 20),
+          TextFormField(
+            controller: _passwordController,
+            keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: 'PassWord',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          submitButton(context),
+          SizedBox(height: 10),
+          TextButton(
+            onPressed: () => Navigator.pushNamed(context, '/signup'),
+            child: const Text('Sign up'),
+          ),
+        ],
+      ),
     );
   }
 
   Widget submitButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: _signUp,
+      onPressed: _login,
       child: Container(
         padding: const EdgeInsets.all(15),
         child: const Text(
-          "Sign Up",
+          "Log in",
           style: TextStyle(
             fontSize: 18,
           ),

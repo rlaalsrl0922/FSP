@@ -54,16 +54,16 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    final String id = _idController.text;
+    final String name = _idController.text;
     final String password = _passwordController.text;
 
     if (_formResponse.currentState!.validate()) {
       try {
         final response = await http.post(
-          Uri.parse('https://your-api-url.com/login'),
+          Uri.parse('https://localhost:8080/auth/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
-            'id': id,
+            'name': name,
             'password': password,
           }),
         );
@@ -78,6 +78,7 @@ class _LoginFormState extends State<LoginForm> {
           _showErrorDialog(responseData['message'] ?? '로그인 실패');
         }
       } catch (error) {
+        print(error);
         _showErrorDialog('네트워크 오류가 발생했습니다.');
       }
     }
@@ -157,7 +158,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Container(
         padding: const EdgeInsets.all(15),
         child: const Text(
-          "Sign in",
+          "Log in",
           style: TextStyle(
             fontSize: 18,
           ),
