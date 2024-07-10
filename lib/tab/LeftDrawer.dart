@@ -59,12 +59,7 @@ class _LeftDrawerState extends State<LeftDrawer>{
             ListTile(
               title: Text('Logout'),
               onTap: () {
-                _showLogoutDialog(context, 'Are you gonna Logout', [
-                  {'text': 'Github ', 'url': 'https://github.com/rlaalsrl0922'},
-                  {'text': 'Email ', 'url': 'mailto:rlaalsrl0922@khu.ac.kr'},
-                  {'text': 'LinkedIn ', 'url': 'https://www.linkedin.com/in/minki-kim-13892'},
-                  {'text': 'Resume ', 'url': 'https://superficial-waiter-55e.notion.site/1feb56ba63c8415e83d3302768f454bf?pvs=4'}
-                ]);
+                _showLogoutDialog(context, 'Are you gonna Logout');
               },
             ),
           ]
@@ -110,7 +105,7 @@ class _LeftDrawerState extends State<LeftDrawer>{
     );
   }
 
-  void _showLogoutDialog(BuildContext context, String title, List<Map<String, String>> contentList) {
+  void _showLogoutDialog(BuildContext context, String title,){
     showDialog(
         context: context,
         builder: (BuildContext context) {

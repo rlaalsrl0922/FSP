@@ -81,37 +81,37 @@ class CompanyCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row( children: [Container(
-              width: 60,
-              height: 60,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                shape:BoxShape.circle,
-              ),
-              child: Image.network(
+                width: 60,
+                height: 60,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  shape:BoxShape.circle,
+                ),
+                child: Image.network(
                   company.logoUrl,
                   height: 50,
                   width: 50,
                 )),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      company.ticker,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    company.ticker,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      company.name,
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
+                  ),
+                  Text(
+                    company.name,
+                    style: TextStyle(
+                      fontSize: 14,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
+            ],
             ),
             SizedBox(height: 10),
             Column(

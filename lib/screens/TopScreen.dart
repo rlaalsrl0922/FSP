@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/screens/LeftDrawer.dart';
-import 'package:myapp/screens/testscreen.dart';
+import 'package:myapp/tab/LeftDrawer.dart';
 import 'package:unicons/unicons.dart';
+import 'package:myapp/widget/TopStockWidget.dart';
 
 class TopScreen extends StatelessWidget {
 
