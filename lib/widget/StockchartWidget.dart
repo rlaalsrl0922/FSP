@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:csv/csv.dart';
+import 'package:yahoo_finance_data_reader/yahoo_finance_data_reader.dart';
 
 
 
@@ -16,13 +17,15 @@ class StockChart extends StatefulWidget {
 class _StockChartState extends State<StockChart> {
   late Future<List<ChartSampleData>> _chartData;
   TrackballBehavior? _trackballBehavior;
-
+  String ticker='MSFT';
   @override
   void initState() {
     super.initState();
-    _chartData = getChartData();
+    _chartData = getChartData(ticker);
     _trackballBehavior = TrackballBehavior(
-        enable: true, activationMode: ActivationMode.longPress);
+        enable: true,
+        activationMode: ActivationMode.longPress
+    );
   }
 
   @override
@@ -37,7 +40,7 @@ class _StockChartState extends State<StockChart> {
         } else {
           final data = snapshot.data ?? [];
           return SfCartesianChart(
-            title: ChartTitle(text: 'MSFT'),
+            title: ChartTitle(text: ticker),
             trackballBehavior: _trackballBehavior,
             zoomPanBehavior: ZoomPanBehavior(
               enablePanning: true,
@@ -64,8 +67,9 @@ class _StockChartState extends State<StockChart> {
   }
 }
 
-// ChartSampleData 클래스 정의
+
 class ChartSampleData {
+
   ChartSampleData({this.x, this.open, this.high, this.low, this.close});
 
   final DateTime? x;
@@ -75,32 +79,25 @@ class ChartSampleData {
   final num? close;
 }
 
-// getChartData 함수 정의
-Future<List<ChartSampleData>> getChartData() async {
-  // CSV 파일 읽기
-  final String rawCsv = await rootBundle.loadString('assets/csv/msft.csv');
+Future<List<ChartSampleData>> getChartData(String tic) async {
+  String ticker = tic;
+  YahooFinanceDailyReader yahooFinanceDataReader = YahooFinanceDailyReader();
 
-  List<List<dynamic>> csvTable = CsvToListConverter().convert(rawCsv);
+  Map<String, dynamic> historicalData = await yahooFinanceDataReader.getDailyData(ticker);
 
   List<ChartSampleData> chartData = [];
-
-  // CSV의 첫 번째 행을 스킵하고 데이터를 파싱
-  for (int i = 1; i < csvTable.length; i++) {
-    final row = csvTable[i];
-    final DateTime date = DateTime.parse(row[0]);
-    final double open = row[1];
-    final double high = row[2];
-    final double low = row[3];
-    final double close = row[4];
-
+  historicalData.forEach((date, data) {
+    print(date);
+    print(data);
+    DateTime parsedDate = DateTime.parse(date);
     chartData.add(ChartSampleData(
-      x: date,
-      open: open,
-      high: high,
-      low: low,
-      close: close,
+      x: parsedDate,
+      open: data['open'],
+      high: data['high'],
+      low: data['low'],
+      close: data['close'],
     ));
-  }
+  });
 
   return chartData;
 }
