@@ -3,49 +3,42 @@ import 'package:unicons/unicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:myapp/api/StockGetApiService.dart';
 
 
 class Stockscreen extends StatelessWidget {
-  // Example data
-  final List<Stock> stocks = [
-    Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),
-    Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),
-  ];
+
+  final StockGetApiService stockGetApiService = StockGetApiService();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: stocks.length,
-      itemBuilder: (context, index) {
-        final stock = stocks[index];
-        return StockCard(stock: stock);
-      },
+    return Scaffold(
+      body: FutureBuilder<List<Stock>>(
+        future: stockGetApiService.getStockData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data available'));
+          }
+          else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final stock = snapshot.data![index];
+                return StockCard(stock: stock);
+              },
+            );
+          }
+        },
+      ),
     );
   }
+
 }
 
 class StockCard extends StatelessWidget {
@@ -61,19 +54,22 @@ class StockCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(onPressed: () => {Navigator.pushNamed(context,'/home')},
-                child: Container(
+            ElevatedButton(onPressed: () => {Navigator.pushNamed(context,'/individual'
+                ,arguments: stock)},
+                child: Column(
+                  children: [
+                Container(
                   child: Row(children: [Container(
-                    width: 60,
-                    height: 60,
+                    width: 40,
+                    height: 40,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                     ),
                     child: Image.network(
                       stock.logoUrl,
-                      height: 50,
-                      width: 50,
+                      height: 40,
+                      width: 40,
                     ),
                   ),
                     Padding(
@@ -83,8 +79,10 @@ class StockCard extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.all(5.0),
                     ),
-                    Text(stock.ticker, style: TextStyle(color: Colors.grey)),
                   ],),
+                ),
+                    Text(stock.ticker, style: TextStyle(color: Colors.grey)),
+                  ]
                 )
             ),
           ],
@@ -183,12 +181,25 @@ class Stock {
   final String logoUrl;
   final String ticker;
   final String name;
+  final String price;
+  final String today;
 
   Stock({
     required this.logoUrl,
     required this.ticker,
     required this.name,
+    required this.price,
+    required this.today
   });
+
+  factory Stock.fromJson(Map<String, dynamic> json) {
+    return Stock(
+      name: json['name'],
+      ticker: json['ticker'],
+      logoUrl: json['logoUrl'],
+      price: json['price'],
+      today: json['today'],
+    );
+  }
+
 }
-
-

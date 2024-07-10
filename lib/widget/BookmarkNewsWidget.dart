@@ -5,54 +5,7 @@ import 'package:intl/intl.dart';
 
 class CompanyNewsScreen extends StatelessWidget {
   // Example data
-  final List<Company> companies = [
-    Company(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-      news: [
-        News(title: 'Apple launches new iPhone', url: 'https://news.example.com/apple1'),
-        News(title: 'Apple Q2 earnings report', url: 'https://news.example.com/apple2'),
-      ],
-    ),
-    Company(
-      logoUrl: 'https://example.com/logo2.png',
-      ticker: 'GOOGL',
-      name: 'Alphabet Inc.',
-      news: [
-        News(title: 'Google announces new AI features', url: 'https://news.example.com/google1'),
-        News(title: 'Alphabet Q2 earnings report', url: 'https://news.example.com/google2'),
-      ],
-    ),
-    Company(
-      logoUrl: 'https://example.com/logo2.png',
-      ticker: 'GOOGL',
-      name: 'Alphabet Inc.',
-      news: [
-        News(title: 'Google announces new AI features', url: 'https://news.example.com/google1'),
-        News(title: 'Alphabet Q2 earnings report', url: 'https://news.example.com/google2'),
-      ],
-    ),
-    Company(
-      logoUrl: 'https://example.com/logo2.png',
-      ticker: 'GOOGL',
-      name: 'Alphabet Inc.',
-      news: [
-        News(title: 'Google announces new AI features', url: 'https://news.example.com/google1'),
-        News(title: 'Alphabet Q2 earnings report', url: 'https://news.example.com/google2'),
-      ],
-    ),
-    Company(
-      logoUrl: 'https://example.com/logo2.png',
-      ticker: 'GOOGL',
-      name: 'Alphabet Inc.',
-      news: [
-        News(title: 'Google announces new AI features', url: 'https://news.example.com/google1'),
-        News(title: 'Alphabet Q2 earnings report', url: 'https://news.example.com/google2'),
-      ],
-    ),
-    // Add more companies here
-  ];
+  final List<Company> companies = [];
 
   @override
   Widget build(BuildContext context) {
@@ -133,13 +86,13 @@ class NewsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(news.title),
+      title: Text(news.newsTitle),
       leading: Icon(UniconsLine.newspaper),
       onTap: () async {
-        if (await canLaunch(news.url)) {
-          await launch(news.url);
+        if (await canLaunch(news.newsUrl)) {
+          await launch(news.newsUrl);
         } else {
-          throw 'Could not launch ${news.url}';
+          throw 'Could not launch ${news.newsUrl}';
         }
       },
     );
@@ -161,10 +114,10 @@ class Company {
 }
 
 class News {
-  final String title;
-  final String url;
-  //final String date;
+  final String newsTitle;
+  final String newsUrl;
+  final String newsPublisher;
+  final String newsPublishedTime;
 
-  //News({required this.title, required this.url,required this.date});
-  News({required this.title, required this.url});
+  News({required this.newsTitle, required this.newsUrl,required this.newsPublishedTime, required this.newsPublisher});
 }

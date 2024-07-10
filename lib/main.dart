@@ -3,11 +3,13 @@ import 'package:myapp/tab/tab_action.dart';
 import 'package:myapp/page/home_page.dart';
 import 'package:myapp/page/login_page.dart';
 import 'package:myapp/page/signup_page.dart';
+import 'package:myapp/widget/IndividualScreenWidget.dart';
 import 'dart:io';
+
+import 'package:myapp/widget/StockchartWidget.dart';
 
 
 void main() {
-  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -25,16 +27,10 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context) => LoginPage(),
         "/signup": (context) => SignupPage(),
-        "/home" : (context) => TabActions(selectedIndex: 0)
+        "/home" : (context) => TabActions(selectedIndex: 0),
+        "/individual/widget" :(context) => IndividualScreenWidget()
       },
     );
   }
 }
 
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext? context){  // '?'를 추가해서 null safety 확보
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-  }
-}
