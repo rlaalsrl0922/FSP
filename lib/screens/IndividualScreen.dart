@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/tab/LeftDrawer.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
-import 'package:myapp/screens/IndividualNewsScreen.dart';
 import 'package:myapp/widget/StockchartWidget.dart';
-
+import 'package:myapp/domain/Fullstock.dart';
+import 'package:myapp/widget/IndividualNewsWidget.dart';
+import 'package:myapp/domain/TopStock.dart';
 
 class IndividualScreen extends StatelessWidget {
+  final FullStockData stockData;
+  final Stock stock;
+
+  IndividualScreen({required this.stockData,required this.stock});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +27,21 @@ class IndividualScreen extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Image.network(
-                'assets/images/download.png',
+                stock.logoUrl,
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
             ),
-            Text('[Ticker]',
+            Text(
+              stock.ticker,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-              ),),
+              ),
+            ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-              child: Text('[Stock Name]'),
+              child: Text(stock.name),
             ),
           ],
         ),
@@ -57,14 +61,13 @@ class IndividualScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text('Stock Price ',
+                          Text(stock.price,
                               style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.black)
-                          ),
+                                  color: Colors.black)),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 6, 0, 0),
-                            child: Text('Stock change(+) (Stock change(%))'),
+                            child: Text(stock.today),
                           ),
                         ],
                       ),
@@ -75,11 +78,73 @@ class IndividualScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                              child:Container(
-                                  width: 350,
-                                  height: 200,
-                                  child: StockChart()
-                              )
+                            child: Container(
+                              width: 350,
+                              height: 200,
+                              child: StockChart(ticker : stockData.ticker), // Assuming StockChart is a defined widget
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/4363/4363382.png',
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text('News ',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 20,),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              width: 350,
+                              height: 500,
+                              child: stockData != null
+                                  ? IndividualNewsScreen(stock: stockData)
+                                  : Container(),
+                            ),
                           ),
                         ],
                       ),
@@ -88,57 +153,9 @@ class IndividualScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 20,),
-                      Container(
-                        width: 30,
-                        height: 30,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.network(
-                          'https://cdn-icons-png.flaticon.com/512/4363/4363382.png',
-                        ),
-                      ),Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                        child: Row( mainAxisSize: MainAxisSize.max,
-                          children: [Text('News ',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                          ],
-                        ),
-                      ),
-                    ],),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(child:
-                        Container(
-                          width: 350,
-                          height: 500,
-                          child: IndividualNewsScreen(),
-                        )
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ))
           ],
         ),
       ),
-      drawer: LeftDrawer(),
     );
   }
 }

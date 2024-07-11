@@ -15,7 +15,6 @@ class TabNavigations{
 
   static List<TabNavigations> get items=>[
     TabNavigations(page: BookmarkScreen(), title: Text("Trending"), icon: Icon(UniconsLine.star)),
-    TabNavigations(page: IndividualScreen(), title: Text("Principles"), icon: Icon(UniconsLine.analysis)),
     TabNavigations(page: TopScreen(), title: Text("Individual"), icon: Icon(UniconsLine.list_ul))
   ];
 }

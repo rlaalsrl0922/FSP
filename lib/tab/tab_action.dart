@@ -48,10 +48,6 @@ class _TabsActionsPageState extends State<TabActions> {
             label: 'Star',
           ),
           BottomNavigationBarItem(
-            icon: Icon(UniconsLine.analysis),
-            label: 'Individual',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(UniconsLine.list_ul),
             label: 'Top100',
           ),],

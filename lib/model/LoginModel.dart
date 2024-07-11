@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myapp/api/TokenStorage.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+
   final _formResponse = GlobalKey<FormState>();
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -30,6 +32,9 @@ class _LoginFormState extends State<LoginForm> {
           final Map<String, dynamic> responseData = jsonDecode(response.body);
           final String accessToken = responseData['accessToken'];
           final String refreshToken = responseData['refreshToken'];
+
+          // 토큰을 저장합니다.
+          await TokenStorage.saveTokens(accessToken, refreshToken);
 
           // 토큰을 사용하여 auth/test 엔드포인트로 요청을 보냄
           final testResponse = await http.post(

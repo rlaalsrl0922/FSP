@@ -3,55 +3,56 @@ import 'package:unicons/unicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:myapp/api/StockGetApiService.dart';
+import 'package:myapp/model/ToptoIndividualModel.dart';
+import 'package:myapp/domain/TopStock.dart';
+import 'package:myapp/api/IndividualGetApiService.dart';
+import 'package:myapp/domain/Fullstock.dart';
+import 'package:myapp/screens/IndividualScreen.dart';
 
 
 class Stockscreen extends StatelessWidget {
-  // Example data
-  final List<Stock> stocks = [
-    Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),
-    Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),Stock(
-      logoUrl: 'https://example.com/logo1.png',
-      ticker: 'AAPL',
-      name: 'Apple Inc.',
-    ),
-  ];
+
+  final StockGetApiService stockGetApiService = StockGetApiService();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: stocks.length,
-      itemBuilder: (context, index) {
-        final stock = stocks[index];
-        return StockCard(stock: stock);
-      },
+    return Scaffold(
+      body: FutureBuilder<List<Stock>>(
+        future: stockGetApiService.getStockData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data available'));
+          }
+          else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final stock = snapshot.data![index];
+                return StockCard(stock: stock);
+              },
+            );
+          }
+        },
+      ),
     );
   }
+
 }
 
 class StockCard extends StatelessWidget {
   final Stock stock;
+  String Url='http://localhost:8080/news';
 
   StockCard({required this.stock});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,32 +62,57 @@ class StockCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(onPressed: () => {Navigator.pushNamed(context,'/home')},
-                child: Container(
-                  child: Row(children: [Container(
-                    width: 60,
-                    height: 60,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.network(
-                      stock.logoUrl,
-                      height: 50,
-                      width: 50,
+            ElevatedButton(
+                onPressed: () async {
+                  if (stock != null) {
+                    // 누른 주식의 뉴스 데이터 호출
+                    final individualGetApiService = IndividualGetApiService(stock: stock);
+                    try {
+                      FullStockData data = await individualGetApiService.getIndividualStockData();
+                      Navigator.of(context).push(
+                          (
+                              MaterialPageRoute(
+                                  builder: (context) => IndividualScreen(stockData: data, stock: stock)
+                              )
+                          )
+                      );
+                    } catch (e) {
+                      print('Error: $e');
+                    }
+                  }
+                },
+                child: Row(children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.network(
+                            stock!.logoUrl,
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                        Text(stock!.ticker,
+                            style: TextStyle(color: Colors.grey)),
+                      ],
                     ),
                   ),
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    Text(stock.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                    ),
-                    Text(stock.ticker, style: TextStyle(color: Colors.grey)),
-                  ],),
-                )
-            ),
+                  SizedBox(width: 20),
+                  Text(stock!.ticker, style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(width: 20),
+                  Text(stock!.price, style: TextStyle(
+                      fontSize: 12)),
+                  SizedBox(width: 10),
+                  Text(stock!.today, style: TextStyle(
+                      fontSize: 9)),
+                ])),
           ],
         ),
       ),
@@ -178,17 +204,3 @@ class StockTile extends StatelessWidget {
     );
   }
 }
-
-class Stock {
-  final String logoUrl;
-  final String ticker;
-  final String name;
-
-  Stock({
-    required this.logoUrl,
-    required this.ticker,
-    required this.name,
-  });
-}
-
-
