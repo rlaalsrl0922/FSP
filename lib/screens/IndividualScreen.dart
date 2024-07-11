@@ -27,21 +27,21 @@ class IndividualScreen extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Image.network(
-                stock!.logoUrl,
+                stock.logoUrl,
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
             ),
             Text(
-              stock!.ticker,
+              stock.ticker,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-              child: Text(stock!.name),
+              child: Text(stock.name),
             ),
           ],
         ),
@@ -61,13 +61,13 @@ class IndividualScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(stock!.price,
+                          Text(stock.price,
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black)),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 6, 0, 0),
-                            child: Text(stock!.today),
+                            child: Text(stock.today),
                           ),
                         ],
                       ),
@@ -81,12 +81,42 @@ class IndividualScreen extends StatelessWidget {
                             child: Container(
                               width: 350,
                               height: 200,
-                              child: StockChart(ticker : stockData!.ticker), // Assuming StockChart is a defined widget
+                              child: StockChart(ticker : stockData.ticker), // Assuming StockChart is a defined widget
                             ),
                           ),
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/4363/4363382.png',
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text('News ',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -100,29 +130,6 @@ class IndividualScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(width: 20,),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.network(
-                            'https://cdn-icons-png.flaticon.com/512/4363/4363382.png',
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text('News ',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                     Padding(
