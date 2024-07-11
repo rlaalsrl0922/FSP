@@ -8,10 +8,10 @@ class News {
 
   factory News.fromJson(Map<String, dynamic> json) {
     return News(
-      newsTitle: json['newsTitle'],
-      newsUrl: json['newsUrl'],
-      newsPublisher: json['newsPublisher'],
-      newsPublishedTime: json['newsPublishedTime'],
+      newsTitle: json['title'] ?? '',
+      newsUrl: json['url'] ?? '',
+      newsPublisher: json['tickers'] ?? '',
+      newsPublishedTime: json['time'] ?? '',
     );
   }
 

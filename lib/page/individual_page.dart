@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/IndividualScreen.dart';
 
+/*
+
 class IndividualPage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
@@ -12,13 +14,13 @@ class IndividualPage extends StatelessWidget {
               Center(
                   child: Text("Stock News", style: TextStyle(fontSize: 30))),
               SizedBox(height:20.0),
-              IndividualScreen(),
+
             ])
         ),
     );
   }
 }
-/*
+
 _sampleOne(int index, context) {
   return GestureDetector(
     onTap: () {

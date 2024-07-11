@@ -19,14 +19,14 @@ class FullStockData {
     required this.news
   });
 
-  factory FullStockData.fromStockAndStockData(Stock stock, StockData stockData) {
+  factory FullStockData.fromStockAndStockData(Stock stock, List<News> newsList) {
     return FullStockData(
       logoUrl: stock.logoUrl,
       ticker: stock.ticker,
       name: stock.name,
       price: stock.price,
       today: stock.today,
-      news : stockData.news
+      news : newsList
     );
   }
 }

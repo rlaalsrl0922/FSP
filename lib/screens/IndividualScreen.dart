@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/tab/LeftDrawer.dart';
 import 'package:myapp/widget/StockchartWidget.dart';
-import 'package:myapp/widget/IndividualScreenWidget.dart';
-import 'package:myapp/domain/Stock.dart';
-
+import 'package:myapp/domain/Fullstock.dart';
+import 'package:myapp/widget/IndividualNewsWidget.dart';
+import 'package:myapp/domain/TopStock.dart';
 
 class IndividualScreen extends StatelessWidget {
-  final StockData? stockData;
+  final FullStockData stockData;
+  final Stock stock;
 
-  IndividualScreen({this.stockData});
+  IndividualScreen({required this.stockData,required this.stock});
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +27,21 @@ class IndividualScreen extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Image.network(
-                stockData!.imageUrl,
+                stock!.logoUrl,
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
             ),
             Text(
-              stockData!.ticker,
+              stock!.ticker,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-              child: Text(stockData!.name),
+              child: Text(stock!.name),
             ),
           ],
         ),
@@ -61,13 +61,13 @@ class IndividualScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text('Stock Price ',
+                          Text(stock!.price,
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.black)),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0, 6, 0, 0),
-                            child: Text('Stock change(+) (Stock change(%))'),
+                            child: Text(stock!.today),
                           ),
                         ],
                       ),
@@ -81,7 +81,7 @@ class IndividualScreen extends StatelessWidget {
                             child: Container(
                               width: 350,
                               height: 200,
-                              child: StockChart(), // Assuming StockChart is a defined widget
+                              child: StockChart(ticker : stockData!.ticker), // Assuming StockChart is a defined widget
                             ),
                           ),
                         ],
@@ -116,12 +116,8 @@ class IndividualScreen extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                'News ',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                              Text('News ',
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black,
                                 ),
                               ),
                             ],
@@ -138,7 +134,9 @@ class IndividualScreen extends StatelessWidget {
                             child: Container(
                               width: 350,
                               height: 500,
-                              child: IndividualNewsScreen(stock: stockData),
+                              child: stockData != null
+                                  ? IndividualNewsScreen(stock: stockData)
+                                  : Container(),
                             ),
                           ),
                         ],
@@ -151,7 +149,6 @@ class IndividualScreen extends StatelessWidget {
           ],
         ),
       ),
-      drawer: LeftDrawer(), // Assuming LeftDrawer is a defined widget
     );
   }
 }

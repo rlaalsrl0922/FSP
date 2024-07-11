@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:myapp/widget/TopStockWidget.dart';
+import 'package:myapp/domain/TopStock.dart';
 
 class StockGetApiService {
 

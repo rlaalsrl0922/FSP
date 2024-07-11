@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: [BookmarkScreen(), IndividualScreen(), TopScreen()],
+        children: [BookmarkScreen(), TopScreen()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -35,10 +35,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(UniconsLine.star),
             label: 'Star',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UniconsLine.analysis),
-            label: 'Individual',
           ),
           BottomNavigationBarItem(
             icon: Icon(UniconsLine.list_ul),

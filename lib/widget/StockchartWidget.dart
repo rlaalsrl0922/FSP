@@ -3,31 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yahoo_finance_data_reader/yahoo_finance_data_reader.dart';
-import 'package:myapp/domain/Stock.dart';
+
 
 
 
 class StockChart extends StatefulWidget {
 
-  final StockData? stock;
-  StockChart({this.stock});
+  final String ticker;
+  StockChart({required this.ticker});
 
   @override
-  State<StockChart> createState() => _StockChartState(stock : stock);
+  State<StockChart> createState() => _StockChartState();
 
 }
 
 class _StockChartState extends State<StockChart> {
-  final StockData? stock;
-  _StockChartState({this.stock});
-
   late Future<List<ChartSampleData>> _chartData;
   TrackballBehavior? _trackballBehavior;
 
   @override
   void initState() {
     super.initState();
-    _chartData = getChartData(stock!.ticker);
+    _chartData = getChartData(widget.ticker);
     _trackballBehavior = TrackballBehavior(
         enable: true,
         activationMode: ActivationMode.longPress
@@ -46,7 +43,7 @@ class _StockChartState extends State<StockChart> {
         } else {
           final data = snapshot.data ?? [];
           return SfCartesianChart(
-            title: ChartTitle(text: stock!.ticker),
+            title: ChartTitle(text:widget.ticker),
             trackballBehavior: _trackballBehavior,
             zoomPanBehavior: ZoomPanBehavior(
               enablePanning: true,

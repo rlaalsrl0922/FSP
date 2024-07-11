@@ -4,6 +4,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:myapp/api/StockGetApiService.dart';
+import 'package:myapp/model/ToptoIndividualModel.dart';
+import 'package:myapp/domain/TopStock.dart';
+import 'package:myapp/api/IndividualGetApiService.dart';
+import 'package:myapp/domain/Fullstock.dart';
+import 'package:myapp/screens/IndividualScreen.dart';
 
 
 class Stockscreen extends StatelessWidget {
@@ -43,8 +48,11 @@ class Stockscreen extends StatelessWidget {
 
 class StockCard extends StatelessWidget {
   final Stock stock;
+  String Url='http://localhost:8080/news';
 
   StockCard({required this.stock});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +63,24 @@ class StockCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ElevatedButton(
-                onPressed: () => {
-                      Navigator.pushNamed(context, '/individual',
-                          arguments: stock)
-                    },
+                onPressed: () async {
+                  if (stock != null) {
+                    // 누른 주식의 뉴스 데이터 호출
+                    final individualGetApiService = IndividualGetApiService(stock: stock);
+                    try {
+                      FullStockData data = await individualGetApiService.getIndividualStockData();
+                      Navigator.of(context).push(
+                          (
+                              MaterialPageRoute(
+                                  builder: (context) => IndividualScreen(stockData: data, stock: stock)
+                              )
+                          )
+                      );
+                    } catch (e) {
+                      print('Error: $e');
+                    }
+                  }
+                },
                 child: Row(children: [
                   Container(
                     child: Column(
@@ -71,24 +93,24 @@ class StockCard extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           child: Image.network(
-                            stock.logoUrl,
+                            stock!.logoUrl,
                             height: 40,
                             width: 40,
                           ),
                         ),
-                        Text(stock.ticker,
+                        Text(stock!.ticker,
                             style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
                   SizedBox(width: 20),
-                  Text(stock.ticker, style: TextStyle(
+                  Text(stock!.ticker, style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold)),
                   SizedBox(width: 20),
-                  Text(stock.price, style: TextStyle(
+                  Text(stock!.price, style: TextStyle(
                       fontSize: 12)),
                   SizedBox(width: 10),
-                  Text(stock.today, style: TextStyle(
+                  Text(stock!.today, style: TextStyle(
                       fontSize: 9)),
                 ])),
           ],
@@ -181,31 +203,4 @@ class StockTile extends StatelessWidget {
       },
     );
   }
-}
-
-class Stock {
-  final String logoUrl;
-  final String ticker;
-  final String name;
-  final String price;
-  final String today;
-
-  Stock({
-    required this.logoUrl,
-    required this.ticker,
-    required this.name,
-    required this.price,
-    required this.today
-  });
-
-  factory Stock.fromJson(Map<String, dynamic> json) {
-    return Stock(
-      name: json['name'],
-      ticker: json['ticker'],
-      logoUrl: json['logoUrl'],
-      price: json['price'],
-      today: json['today'],
-    );
-  }
-
 }
