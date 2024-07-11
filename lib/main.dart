@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/IndividualScreen.dart';
 import 'package:myapp/tab/tab_action.dart';
 import 'package:myapp/page/home_page.dart';
 import 'package:myapp/page/login_page.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         "/login": (context) => LoginPage(),
         "/signup": (context) => SignupPage(),
         "/home" : (context) => TabActions(selectedIndex: 0),
-        "/individual/widget" :(context) => IndividualScreenWidget()
+        "/individual" : (context) => IndividualScreen()
       },
     );
   }

@@ -54,37 +54,43 @@ class StockCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(onPressed: () => {Navigator.pushNamed(context,'/individual'
-                ,arguments: stock)},
-                child: Column(
-                  children: [
-                Container(
-                  child: Row(children: [Container(
-                    width: 40,
-                    height: 40,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.network(
-                      stock.logoUrl,
-                      height: 40,
-                      width: 40,
+            ElevatedButton(
+                onPressed: () => {
+                      Navigator.pushNamed(context, '/individual',
+                          arguments: stock)
+                    },
+                child: Row(children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.network(
+                            stock.logoUrl,
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                        Text(stock.ticker,
+                            style: TextStyle(color: Colors.grey)),
+                      ],
                     ),
                   ),
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    Text(stock.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                    ),
-                  ],),
-                ),
-                    Text(stock.ticker, style: TextStyle(color: Colors.grey)),
-                  ]
-                )
-            ),
+                  SizedBox(width: 20),
+                  Text(stock.ticker, style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(width: 20),
+                  Text(stock.price, style: TextStyle(
+                      fontSize: 12)),
+                  SizedBox(width: 10),
+                  Text(stock.today, style: TextStyle(
+                      fontSize: 9)),
+                ])),
           ],
         ),
       ),

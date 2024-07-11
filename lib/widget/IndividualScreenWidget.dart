@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:myapp/model/ToptoIndividualModel.dart';
+import 'package:myapp/widget/StockchartWidget.dart';
+import 'package:myapp/domain/News.dart';
+import 'package:myapp/domain/Stock.dart';
 
-// Stock 클래스와 StockNews 클래스 정의가 필요할 수 있습니다. 이 부분은 생략했습니다.
+
 
 class IndividualScreenWidget extends StatelessWidget {
   final StockData? stock;
@@ -11,12 +13,17 @@ class IndividualScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: IndividualAppBarWidget(stock: stock),
-      body: IndividualNewsScreen(stock : stock),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        IndividualAppBarWidget(stock: stock),
+        Expanded(child: IndividualNewsScreen(stock: stock)),
+        Expanded(child: StockChart(stock: stock))
+      ],
     );
   }
 }
+
 
 class IndividualAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final StockData? stock;
@@ -127,53 +134,3 @@ void _launchURL(String url) async {
 }
 
 
-class StockData {
-  final String name;
-  final String ticker;
-  final String imageUrl;
-  final List<News> news; // List to hold news data
-
-  StockData({
-    required this.name,
-    required this.ticker,
-    required this.imageUrl,
-    required this.news,
-  });
-
-  factory StockData.fromJson(Map<String, dynamic> json) {
-    var newsList = (json['news'] as List)
-        .map((newsJson) => News.fromJson(newsJson))
-        .toList();
-
-    return StockData(
-      name: json['name'],
-      ticker: json['tickers'],
-      imageUrl: json['imageUrl'],
-      news: newsList,
-    );
-  }
-
-  List<News> toNewsList() {
-    return news;
-  }
-}
-
-
-class News {
-  final String newsTitle;
-  final String newsUrl;
-  final String newsPublisher;
-  final String newsPublishedTime;
-
-  News({required this.newsTitle, required this.newsUrl,required this.newsPublishedTime, required this.newsPublisher});
-
-  factory News.fromJson(Map<String, dynamic> json) {
-    return News(
-      newsTitle: json['newsTitle'],
-      newsUrl: json['newsUrl'],
-      newsPublisher: json['newsPublisher'],
-      newsPublishedTime: json['newsPublishedTime'],
-    );
-  }
-
-}

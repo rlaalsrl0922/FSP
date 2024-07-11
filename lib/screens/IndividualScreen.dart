@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:myapp/tab/LeftDrawer.dart';
 import 'package:myapp/widget/StockchartWidget.dart';
 import 'package:myapp/widget/IndividualScreenWidget.dart';
-
+import 'package:myapp/domain/Stock.dart';
 
 
 class IndividualScreen extends StatelessWidget {
@@ -15,7 +15,37 @@ class IndividualScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: IndividualAppBarWidget(stock: stockData),
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: Image.network(
+                stockData!.imageUrl,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+            ),
+            Text(
+              stockData!.ticker,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+              child: Text(stockData!.name),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         top: true,
         child: Column(

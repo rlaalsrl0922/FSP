@@ -20,7 +20,7 @@ class ToIndividualButton extends StatelessWidget {
       if (response.statusCode == 200) {
         StockData stockData = StockData.fromJson(jsonDecode(response.body));
         Navigator.pushNamed(
-            context, '/individual/widget',
+            context, '/individual',
             arguments: stockData
         );
       } else {
